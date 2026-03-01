@@ -7,11 +7,14 @@ app = Flask(__name__)
 def render_index_page():
     return render_template("index.html")
 
-# IMPORTANT: endpoint must be /emotionDetector
 @app.route("/emotionDetector")
 def emotion_detection():
     text_to_analyze = request.args.get("textToAnalyze")
     result = emotion_detector(text_to_analyze)
+
+    # Error handling for blank input
+    if result["dominant_emotion"] is None:
+        return "Invalid text! Please try again!"
 
     anger = result["anger"]
     disgust = result["disgust"]
